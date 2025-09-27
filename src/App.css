@@ -1,39 +1,152 @@
+/* App.css - Final version with side-by-side buttons */
+
 body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #FFFACD; /* Light yellow background */
+  color: #333; /* Darker text for contrast */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  /* Adding a smiling face background */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23FFD700"/><circle cx="35" cy="40" r="5" fill="%23000"/><circle cx="65" cy="40" r="5" fill="%23000"/><path d="M30 65 Q50 80 70 65" stroke="%23000" stroke-width="4" fill="none"/></svg>');
+  background-repeat: repeat;
+  background-size: 100px; /* Adjust size of repeating smileys */
 }
 
-h1 {
-    color: #333;
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }
 
-video {
-    border: 5px solid #ccc;
-    border-radius: 10px;
-    background-color: #000;
-    width: 100%;
-    max-width: 640px;
-    height: auto;
+.app {
+  text-align: center;
+  padding: 20px;
+  background-color: #FFFFF0; /* Lighter yellow for the app box */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 90%;
+  color: #333; /* Ensure text inside app box is readable */
 }
 
-button {
-    margin-top: 20px;
-    padding: 12px 24px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: white;
-    transition: background-color 0.3s;
+.app__header {
+  margin-bottom: 30px;
 }
 
-button:hover {
-    background-color: #0056b3;
+.app__title {
+  font-size: 2.5em;
+  color: #FFD700; /* Gold yellow for title */
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.app__subtitle {
+  font-size: 1.2em;
+  color: #888; /* Slightly darker subtitle */
+  font-weight: bold;
+}
+
+.app__video-wrapper {
+  position: relative;
+  width: auto;
+  height: auto;
+  margin: 0 auto 20px auto;
+  border: 3px solid #FFD700; /* Gold yellow border */
+  border-radius: 8px;
+  overflow: hidden;
+  display: inline-block;
+  background-color: black;
+}
+
+.app__video-feed {
+  width: 100%;
+  height: auto;
+  display: block;
+  transform: none; /* กล้อง mirror */
+}
+
+.app__analysis-overlays {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* กรอบรอบหน้าคน */
+.face-overlay {
+  position: absolute;
+  border: 2px solid #0a0a09; /* Orange-yellow for face border */
+  border-radius: 5px;
+  box-sizing: border-box;
+  opacity: 0.9;
+  display: flex;
+  align-items: flex-start; /* วางข้อความด้านบน */
+  justify-content: center;
+  background-color: rgba(255, 165, 0, 0.2); /* Translucent orange-yellow background */
+}
+
+
+.face-overlay__emotion {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: rgb(220, 25, 25); /* Ensure emotion text is readable */
+  padding: 4px 8px;
+  border-radius: 33px;
+  font-size: 0.9em;
+  margin-top: 2px;
+  white-space: nowrap;
+  transform: none; /* กลับข้อความให้อ่านถูก */
+  font-weight: bold;
+}
+
+.app__controls {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  padding: 12px 25px;
+  font-size: 1.1em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 10px;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
+}
+
+.button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.button--start {
+  background-color: #FFD700; /* Gold yellow for start button */
+  color: #333; /* Dark text for contrast */
+}
+
+.button--start:hover {
+  background-color: #00e235; /* Green on hover */
+}
+
+.button--stop {
+  background-color: #FF6347; /* Tomato color for stop button */
+  color: white;
+}
+
+.button--stop:hover {
+  background-color: #05e92f; /* OrangeRed on hover */
 }
