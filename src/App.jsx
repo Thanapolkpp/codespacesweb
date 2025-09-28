@@ -1,4 +1,4 @@
-// App.js - Bilingual Emotion Detector (EN/TH)
+// App.js - Bilingual UI / English TTS Only
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import * as faceapi from 'face-api.js';
@@ -17,7 +17,6 @@ const EMOTION_COLORS = {
   [EMOTIONS.SAD]: '#FF0000',   // Red
 };
 
-// [LANG] 🇹🇭/🇬🇧: Object เก็บข้อความทั้ง 2 ภาษา
 const translations = {
   en: {
     title: 'Emotion Detector',
@@ -53,8 +52,9 @@ const translations = {
       happy: 'มีความสุข',
       sad: 'เศร้า',
     },
-    happyInsult: 'ยิ้มอะไรไอ้โง่?',
-    langCode: 'th-TH',
+    // === ส่วนที่แก้ไข ===
+    happyInsult: 'Why are you smiling, you idiot?', // <-- เปลี่ยนกลับเป็นภาษาอังกฤษ
+    langCode: 'en-US',                             // <-- เปลี่ยนกลับเป็นรหัสของภาษาอังกฤษ
     toggleButton: 'English',
   }
 };
@@ -62,7 +62,6 @@ const translations = {
 // ========================================================================
 // 2. Custom Hook (useFaceAnalysis)
 // ========================================================================
-// [LANG] 🇹🇭/🇬🇧: Hook ต้องรับข้อความ (texts) มาจากข้างนอกเพื่อเปลี่ยนภาษาได้
 const useFaceAnalysis = (videoRef, texts) => {
   const [status, setStatus] = useState(texts.pleaseWait);
   const [analysisResults, setAnalysisResults] = useState([]);
@@ -81,7 +80,7 @@ const useFaceAnalysis = (videoRef, texts) => {
       }
     };
     loadModels();
-  }, [texts]); // re-run if texts object changes, e.g. on language switch
+  }, [texts]);
 
   const analyzeFrame = useCallback(async () => {
     if (!videoRef.current || videoRef.current.paused || videoRef.current.ended) return;
@@ -130,7 +129,6 @@ const useFaceAnalysis = (videoRef, texts) => {
     setStatus(texts.ready);
   };
 
-  // Update status text if language changes while idle
   useEffect(() => {
       if (status === translations.en.ready || status === translations.th.ready) {
           setStatus(texts.ready);
@@ -144,7 +142,6 @@ const useFaceAnalysis = (videoRef, texts) => {
 // 3. Main App Component
 // ========================================================================
 function App() {
-  // [LANG] 🇹🇭/🇬🇧: สร้าง state สำหรับเก็บภาษาปัจจุบัน (en = English, th = Thai)
   const [language, setLanguage] = useState('en');
   const [stream, setStream] = useState(null);
   const [isSad, setIsSad] = useState(false);
@@ -154,7 +151,6 @@ function App() {
   const mainAudioRef = useRef(null);
   const sadAudioRef = useRef(null);
 
-  // [LANG] 🇹🇭/🇬🇧: เลือกชุดข้อความตามภาษาที่เลือก
   const TEXTS = translations[language];
 
   const { status, results, startAnalysis, stopAnalysis } = useFaceAnalysis(videoRef, TEXTS);
@@ -184,17 +180,19 @@ function App() {
     const happyDetected = results.some(face => face.emotion === EMOTIONS.HAPPY);
 
     if (happyDetected && !alreadySpoken) {
-      // [LANG] 🇹🇭/🇬🇧: ใช้ข้อความและรหัสภาษาตาม state ปัจจุบัน
       const utterance = new SpeechSynthesisUtterance(TEXTS.happyInsult);
       utterance.lang = TEXTS.langCode;
       utterance.rate = 1;
       utterance.pitch = 1;
+
+      window.speechSynthesis.cancel();
       window.speechSynthesis.speak(utterance);
+
       setAlreadySpoken(true);
     }
 
     if (!happyDetected) setAlreadySpoken(false);
-  }, [results, alreadySpoken, TEXTS]); // เพิ่ม TEXTS เข้าไปใน dependency array
+  }, [results, alreadySpoken, TEXTS]);
 
   const handleStartCamera = async () => {
     try {
@@ -219,7 +217,6 @@ function App() {
     }
   };
 
-  // [LANG] 🇹🇭/🇬🇧: ฟังก์ชันสำหรับสลับค่า state ของภาษา
   const toggleLanguage = () => {
     setLanguage(currentLang => (currentLang === 'en' ? 'th' : 'en'));
   };
@@ -229,7 +226,6 @@ function App() {
       <audio ref={mainAudioRef} src="/background-music.mp3" loop />
       <audio ref={sadAudioRef} src="/s.mp3" loop />
       <header className="app__header">
-        {/* [LANG] 🇹🇭/🇬🇧: ปุ่มสลับภาษา */}
         <button onClick={toggleLanguage} className="language-toggle">
           {TEXTS.toggleButton}
         </button>
